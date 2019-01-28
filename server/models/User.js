@@ -6,10 +6,6 @@ var userSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true }
 })
 
-userSchema.statics.findByEmail = function(email, cb) {
-  return this.find({ email: new RegExp(email, 'i') }, cb);
-}
-
 userSchema.methods.verifyPassword = function(password, cb) {
   bcrypt.compare(password, this.passwordHash, (err, res) => {
     cb(err, res)

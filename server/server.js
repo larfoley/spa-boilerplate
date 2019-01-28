@@ -1,4 +1,5 @@
 require('dotenv').config()
+const config = require('../config.js')
 const express = require('express')
 const path = require('path')
 const logger = require('morgan')
@@ -20,7 +21,7 @@ const accountController = require('./controllers/account')
 //=========================
 mongoose.connect( process.env.DB, { useNewUrlParser: true })
 
-db.on('error', console.error.bind(console, 'connection error:'))
+db.on('error', console.error.bind(console, 'Error connecting to the database'))
 db.once('open', () => {
   console.log("Connected to database")
 })
@@ -47,7 +48,7 @@ app.use(logger('dev'))
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, 'client/index.')))
+app.use(express.static(path.join(__dirname, config.public_path)))
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -65,11 +66,10 @@ app.use('/api/*', (req, res, next) => {
   next(err)
 })
 
-
 // Send SPA
 // ==============
 app.use('/*', (req, res, next) => {
-  res.sendFile(path.join(__dirname, 'client/index.html'))
+  res.sendFile(path.join(__dirname, config.spa_path))
 })
 
 // error handler
@@ -78,6 +78,7 @@ app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
+  console.log(err.message);
   res.status(err.status || 500).json({message: err.message})
 })
 

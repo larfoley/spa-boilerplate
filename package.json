@@ -6,8 +6,8 @@
     "node": "7.10.0"
   },
   "scripts": {
-    "start": "NODE_ENV=production node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "start": "NODE_ENV=production node ./server/bin/www",
+    "dev": "nodemon ./server/bin/www"
   },
   "dependencies": {
     "bcrypt": "^3.0.0",
